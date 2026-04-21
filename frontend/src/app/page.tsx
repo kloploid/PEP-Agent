@@ -150,14 +150,14 @@ export default function Home() {
         </header>
 
         <section className="grid min-h-0 flex-1 gap-4 px-4 pb-6 sm:px-6 lg:grid-cols-2 lg:px-8">
-          <article className="flex min-h-[520px] flex-col overflow-hidden rounded-3xl border border-white/70 bg-white/90 shadow-[0_10px_40px_rgba(30,41,59,0.09)]">
-            <div className="border-b bg-[#6e5192] px-5 py-4">
+          <article className="flex h-[min(80dvh,760px)] min-h-[520px] flex-col overflow-hidden rounded-3xl border border-white/70 bg-white/90 shadow-[0_10px_40px_rgba(30,41,59,0.09)]">
+            <div className="shrink-0 border-b bg-[#6e5192] px-5 py-4">
               <h2 className="text-lg font-semibold text-white">
                 Chat with Assistant
               </h2>
             </div>
 
-            <div className="flex-1 space-y-3 overflow-y-auto p-5">
+            <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-5">
               {messages.length === 0 && (
                 <div className="max-w-[92%] rounded-2xl bg-slate-100 px-4 py-3 text-sm leading-relaxed text-slate-700">
                   Hi! Enter your information above and I&apos;ll suggest a study
@@ -194,7 +194,7 @@ export default function Home() {
               )}
             </div>
 
-            <div className="border-t border-slate-200 p-4">
+            <div className="shrink-0 border-t border-slate-200 p-4">
               <div className="flex gap-2">
                 <textarea
                   className="max-h-28 min-h-12 flex-1 resize-none rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none ring-sky-200 transition focus:ring-2"
@@ -220,14 +220,14 @@ export default function Home() {
             </div>
           </article>
 
-          <article className="flex min-h-[520px] flex-col overflow-hidden rounded-3xl border border-white/70 bg-white/90 shadow-[0_10px_40px_rgba(30,41,59,0.09)]">
-            <div className="border-b bg-[#6e5192] px-5 py-4">
+          <article className="flex h-[min(80dvh,760px)] min-h-[520px] flex-col overflow-hidden rounded-3xl border border-white/70 bg-white/90 shadow-[0_10px_40px_rgba(30,41,59,0.09)]">
+            <div className="shrink-0 border-b bg-[#6e5192] px-5 py-4">
               <h2 className="text-lg font-semibold text-white">
                 Recommended Timetable
               </h2>
             </div>
 
-            <div className="flex-1 overflow-auto p-5">
+            <div className="min-h-0 flex-1 overflow-auto p-5">
               <Calendar
                 plan={plan}
                 busySlots={profile.busy_slots}
