@@ -142,7 +142,7 @@ export default function Home() {
               width={256}
               height={256}
               priority
-              className="h-24 w-auto drop-shadow-[0_6px_18px_rgba(15,23,42,0.35)]"
+              className="h-13 w-auto drop-shadow-[0_6px_18px_rgba(15,23,42,0.35)]"
             />
             <p
               className="text-5xl uppercase leading-[0.95] tracking-[0.2em] text-white/95"
