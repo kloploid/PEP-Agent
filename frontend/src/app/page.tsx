@@ -72,6 +72,42 @@ function hasProfileData(p: StudentProfile): boolean {
   );
 }
 
+type MascotState = "waiting" | "thinking" | "answering";
+
+const MASCOT_SRC: Record<MascotState, string> = {
+  waiting: "/img/waiting.png",
+  thinking: "/img/thinking.png",
+  answering: "/img/answering_openMouth.png",
+};
+
+function MascotCorner({ state }: { state: MascotState }) {
+  return (
+    <div className="pointer-events-none absolute bottom-[88px] right-3 z-10 flex items-end gap-1">
+      {state === "thinking" && (
+        <div className="relative mb-6 mr-3 rounded-[28px] bg-white px-4 py-2 text-xs font-medium text-slate-600 shadow-[0_6px_20px_rgba(15,23,42,0.15)]">
+          Thinking…
+          <span className="absolute -bottom-2 right-2 h-3 w-3 rounded-full bg-white shadow-[0_4px_10px_rgba(15,23,42,0.12)]" />
+          <span className="absolute -bottom-5 right-0 h-2 w-2 rounded-full bg-white shadow-[0_4px_10px_rgba(15,23,42,0.12)]" />
+        </div>
+      )}
+      {state === "answering" && (
+        <div className="relative mb-6 mr-3 rounded-2xl bg-white px-4 py-2 text-xs font-medium text-slate-700 shadow-[0_6px_20px_rgba(15,23,42,0.15)]">
+          Here you go!
+          <span className="absolute -right-[6px] bottom-3 h-0 w-0 border-y-[7px] border-l-[9px] border-y-transparent border-l-white" />
+        </div>
+      )}
+      <Image
+        src={MASCOT_SRC[state]}
+        alt=""
+        width={128}
+        height={128}
+        priority
+        className="h-24 w-24 object-contain drop-shadow-[0_6px_14px_rgba(15,23,42,0.25)]"
+      />
+    </div>
+  );
+}
+
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -158,14 +194,14 @@ export default function Home() {
         </header>
 
         <section className="grid min-h-0 flex-1 gap-4 px-4 pb-6 sm:px-6 lg:grid-cols-2 lg:px-8">
-          <article className="flex h-[min(80dvh,760px)] min-h-[520px] flex-col overflow-hidden rounded-3xl border border-white/70 bg-white/90 shadow-[0_10px_40px_rgba(30,41,59,0.09)]">
+          <article className="relative flex h-[min(80dvh,760px)] min-h-[520px] flex-col overflow-hidden rounded-3xl border border-white/70 bg-white/90 shadow-[0_10px_40px_rgba(30,41,59,0.09)]">
             <div className="shrink-0 border-b bg-[#6e5192] px-5 py-4">
               <h2 className="text-lg font-semibold text-white">
                 Chat with Assistant
               </h2>
             </div>
 
-            <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-5">
+            <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-5 pb-28">
               {messages.length === 0 && (
                 <div className="max-w-[92%] rounded-2xl bg-slate-100 px-4 py-3 text-sm leading-relaxed text-slate-700">
                   Hi! Enter your information above and I&apos;ll suggest a study
@@ -195,12 +231,18 @@ export default function Home() {
                   )}
                 </div>
               ))}
-              {loading && (
-                <div className="max-w-[92%] rounded-2xl bg-slate-100 px-4 py-3 text-sm italic text-slate-500">
-                  Thinking…
-                </div>
-              )}
             </div>
+
+            <MascotCorner
+              state={
+                loading
+                  ? "thinking"
+                  : messages.length > 0 &&
+                      messages[messages.length - 1].role === "assistant"
+                    ? "answering"
+                    : "waiting"
+              }
+            />
 
             <div className="shrink-0 border-t border-slate-200 p-4">
               <div className="flex gap-2">
