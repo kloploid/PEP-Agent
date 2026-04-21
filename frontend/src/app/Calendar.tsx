@@ -26,6 +26,7 @@ export type Plan = {
   courses: PlanCourse[];
   reason?: string;
   absolute_max_ects?: number;
+  busy_slots?: BusySlotView[];
   alternative?: Plan & { relaxed?: string };
 };
 

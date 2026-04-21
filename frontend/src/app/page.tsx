@@ -140,7 +140,7 @@ export default function Home() {
         const alt = p.alternative;
         const display =
           alt && (alt.total_ects ?? 0) > (p.total_ects ?? 0) ? alt : p;
-        setPlan({ ...display });
+        setPlan({ ...display, busy_slots: p.busy_slots });
       } else {
         setPlan(null);
       }
@@ -280,7 +280,7 @@ export default function Home() {
             <div className="min-h-0 flex-1 overflow-auto p-5">
               <Calendar
                 plan={plan}
-                busySlots={profile.busy_slots}
+                busySlots={plan ? (plan.busy_slots ?? []) : profile.busy_slots}
                 onRebuild={rebuildPlan}
                 rebuilding={loading}
               />
