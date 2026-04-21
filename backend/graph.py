@@ -4,6 +4,7 @@ import os
 from typing import Annotated, TypedDict
 
 from langchain_core.messages import AnyMessage, SystemMessage
+from langchain_openai import AzureChatOpenAI
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import add_messages
 
@@ -15,23 +16,14 @@ class AgentState(TypedDict):
 SYSTEM_PROMPT = "You are a helpful AI assistant for the PEP-Agent project."
 
 
-def _build_llm():
-    provider = os.getenv("LLM_PROVIDER", "anthropic").lower()
-    if provider == "anthropic":
-        from langchain_anthropic import ChatAnthropic
-
-        return ChatAnthropic(
-            model=os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-6"),
-            temperature=0,
-        )
-    if provider == "openai":
-        from langchain_openai import ChatOpenAI
-
-        return ChatOpenAI(
-            model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
-            temperature=0,
-        )
-    raise ValueError(f"Unknown LLM_PROVIDER: {provider}")
+def _build_llm() -> AzureChatOpenAI:
+    return AzureChatOpenAI(
+        azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
+        azure_deployment=os.environ["AZURE_OPENAI_DEPLOYMENT"],
+        api_version=os.environ["AZURE_OPENAI_API_VERSION"],
+        api_key=os.environ["AZURE_OPENAI_API_KEY"],
+        temperature=0,
+    )
 
 
 def build_graph():

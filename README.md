@@ -1,6 +1,6 @@
 # PEP-Agent
 
-LangGraph (Python) backend + Next.js frontend.
+LangGraph (Python) backend + Next.js frontend. LLM: **Azure OpenAI `gpt-5.4-nano`** only.
 
 ## Layout
 
@@ -12,7 +12,7 @@ frontend/   Next.js 16 app (TypeScript, Tailwind, App Router)
 ## Quick start (Docker)
 
 ```bash
-cp .env.example .env     # fill in ANTHROPIC_API_KEY
+cp .env.example .env     # fill in AZURE_OPENAI_API_KEY
 docker compose up --build
 ```
 
@@ -27,7 +27,7 @@ Hot reload is enabled for both services via bind mounts.
 
 ```bash
 cd backend
-cp .env.example .env            # fill in ANTHROPIC_API_KEY (or switch LLM_PROVIDER=openai)
+cp .env.example .env            # fill in AZURE_OPENAI_API_KEY
 source .venv/bin/activate
 uvicorn main:app --reload --port 8000
 ```

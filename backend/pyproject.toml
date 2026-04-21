@@ -1,12 +1,11 @@
 [project]
 name = "pep-agent-backend"
 version = "0.1.0"
-description = "LangGraph-powered agent backend for PEP-Agent"
+description = "LangGraph-powered agent backend for PEP-Agent (Azure OpenAI)"
 requires-python = ">=3.12"
 dependencies = [
     "langgraph>=0.2.60",
     "langchain>=0.3.13",
-    "langchain-anthropic>=0.3.0",
     "langchain-openai>=0.2.14",
     "fastapi>=0.115.0",
     "uvicorn[standard]>=0.32.0",
