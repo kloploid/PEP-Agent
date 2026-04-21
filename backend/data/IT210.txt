@@ -1,0 +1,7 @@
+COURSE_CODE: IT210
+COURSE_NAME: UI/UX Design
+DEPARTMENT: IT
+ECTS: 3
+DESCRIPTION: Focuses on user-centric design principles and wireframing tools.
+SCHEDULE:
+- Wednesday 08:00 - 09:30 (Lab) for Group A

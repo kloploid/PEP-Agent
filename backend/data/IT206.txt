@@ -1,0 +1,8 @@
+COURSE_CODE: IT206
+COURSE_NAME: Software Engineering
+DEPARTMENT: IT
+ECTS: 6
+DESCRIPTION: Applies engineering principles to the software development lifecycle.
+SCHEDULE:
+- Tuesday 08:30 - 11:30 (Lecture/Practical) for Group B
+- Thursday 09:00 - 10:30 (Advanced Seminar) for Group B

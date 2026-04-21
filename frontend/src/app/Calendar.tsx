@@ -1,0 +1,236 @@
+"use client";
+
+export type PlanSession = {
+  day: string;
+  start: string;
+  end: string;
+  session: string;
+  group: string;
+};
+
+export type PlanCourse = {
+  code: string;
+  name: string;
+  department: string;
+  ects: number;
+  sessions: PlanSession[];
+};
+
+export type Plan = {
+  status: "exact" | "closest" | "infeasible" | "none";
+  target_ects: number;
+  total_ects: number;
+  department: string | null;
+  group: string | null;
+  group_constraints: Record<string, string>;
+  courses: PlanCourse[];
+  reason?: string;
+};
+
+const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"] as const;
+const DAY_SHORT: Record<string, string> = {
+  Monday: "Mon",
+  Tuesday: "Tue",
+  Wednesday: "Wed",
+  Thursday: "Thu",
+  Friday: "Fri",
+};
+const START_MIN = 8 * 60; // 08:00
+const END_MIN = 17 * 60; // 17:00
+const SLOT_MIN = 30;
+const TOTAL_SLOTS = (END_MIN - START_MIN) / SLOT_MIN; // 18 slots
+
+// Tailwind pairs: [background, border, text]. Stable per course code.
+const PALETTE = [
+  "bg-sky-100/80 border-sky-300 text-sky-800",
+  "bg-violet-100/80 border-violet-300 text-violet-800",
+  "bg-amber-100/90 border-amber-300 text-amber-800",
+  "bg-emerald-100/90 border-emerald-300 text-emerald-800",
+  "bg-rose-100/80 border-rose-300 text-rose-800",
+  "bg-cyan-100/80 border-cyan-300 text-cyan-800",
+  "bg-fuchsia-100/80 border-fuchsia-300 text-fuchsia-800",
+  "bg-lime-100/90 border-lime-300 text-lime-800",
+];
+
+function parseHHMM(s: string): number {
+  const [h, m] = s.split(":").map(Number);
+  return h * 60 + m;
+}
+
+function colorFor(code: string): string {
+  let hash = 0;
+  for (let i = 0; i < code.length; i++) hash = (hash * 31 + code.charCodeAt(i)) | 0;
+  return PALETTE[Math.abs(hash) % PALETTE.length];
+}
+
+function statusLabel(plan: Plan): { text: string; tone: string } {
+  if (plan.status === "exact")
+    return {
+      text: `Exact match: ${plan.total_ects} ECTS`,
+      tone: "text-emerald-700",
+    };
+  if (plan.status === "closest")
+    return {
+      text: `Closest: ${plan.total_ects} / ${plan.target_ects} ECTS`,
+      tone: "text-amber-700",
+    };
+  if (plan.status === "infeasible")
+    return {
+      text: `Infeasible${plan.reason ? `: ${plan.reason}` : ""}`,
+      tone: "text-rose-700",
+    };
+  return { text: "No plan", tone: "text-slate-500" };
+}
+
+export function Calendar({ plan }: { plan: Plan | null }) {
+  if (!plan) {
+    return (
+      <div className="flex h-full items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-sm text-slate-500">
+        Ask the agent for a schedule — the calendar will appear here.
+      </div>
+    );
+  }
+
+  const status = statusLabel(plan);
+
+  // Bucket sessions by day, with references to their course for coloring.
+  type Block = {
+    course: PlanCourse;
+    session: PlanSession;
+    startMin: number;
+    endMin: number;
+  };
+  const byDay: Record<string, Block[]> = Object.fromEntries(DAYS.map((d) => [d, []]));
+  for (const course of plan.courses) {
+    for (const session of course.sessions) {
+      if (!(session.day in byDay)) continue;
+      byDay[session.day].push({
+        course,
+        session,
+        startMin: parseHHMM(session.start),
+        endMin: parseHHMM(session.end),
+      });
+    }
+  }
+
+  return (
+    <div className="flex h-full flex-col gap-3">
+      <header className="flex items-baseline justify-between gap-2">
+        <div>
+          <div className="text-sm font-semibold text-slate-800">Weekly plan</div>
+          <div className={`text-xs ${status.tone}`}>{status.text}</div>
+        </div>
+        <div className="text-right text-xs text-slate-500">
+          {plan.department && <div>{plan.department}</div>}
+          {plan.group && <div>Group {plan.group}</div>}
+          {Object.entries(plan.group_constraints ?? {}).map(([d, g]) => (
+            <div key={d}>
+              {d}: Group {g}
+            </div>
+          ))}
+        </div>
+      </header>
+
+      <div className="flex-1 overflow-auto rounded-2xl border border-slate-200 bg-white">
+        <div
+          className="grid min-w-[520px] text-xs"
+          style={{
+            gridTemplateColumns: `56px repeat(${DAYS.length}, minmax(96px, 1fr))`,
+            gridTemplateRows: `28px repeat(${TOTAL_SLOTS}, 24px)`,
+          }}
+        >
+          {/* Day headers */}
+          <div className="sticky top-0 z-20 border-b border-r border-slate-200 bg-white/90 backdrop-blur" />
+          {DAYS.map((d, i) => (
+            <div
+              key={d}
+              className="sticky top-0 z-20 flex items-center justify-center border-b border-slate-200 bg-white/90 font-semibold text-slate-700 backdrop-blur"
+              style={{ gridColumn: i + 2, gridRow: 1 }}
+            >
+              {DAY_SHORT[d]}
+            </div>
+          ))}
+
+          {/* Time rail */}
+          {Array.from({ length: TOTAL_SLOTS }, (_, s) => {
+            const min = START_MIN + s * SLOT_MIN;
+            const hh = String(Math.floor(min / 60)).padStart(2, "0");
+            const mm = String(min % 60).padStart(2, "0");
+            const isHour = min % 60 === 0;
+            return (
+              <div
+                key={`t-${s}`}
+                className={`border-r border-slate-200 pr-1 text-right leading-none text-slate-500 ${
+                  isHour ? "" : "opacity-0"
+                }`}
+                style={{ gridColumn: 1, gridRow: s + 2 }}
+              >
+                {isHour ? `${hh}:${mm}` : "."}
+              </div>
+            );
+          })}
+
+          {/* Empty day cells for grid lines */}
+          {DAYS.map((_, di) =>
+            Array.from({ length: TOTAL_SLOTS }, (_, s) => {
+              const min = START_MIN + s * SLOT_MIN;
+              const isHour = min % 60 === 0;
+              return (
+                <div
+                  key={`c-${di}-${s}`}
+                  className={`border-r border-slate-100 ${
+                    isHour ? "border-t border-slate-200" : ""
+                  }`}
+                  style={{ gridColumn: di + 2, gridRow: s + 2 }}
+                />
+              );
+            }),
+          )}
+
+          {/* Session blocks */}
+          {DAYS.flatMap((day, di) =>
+            byDay[day].map((block, bi) => {
+              const startSlot = Math.max(0, Math.floor((block.startMin - START_MIN) / SLOT_MIN));
+              const endSlot = Math.min(
+                TOTAL_SLOTS,
+                Math.ceil((block.endMin - START_MIN) / SLOT_MIN),
+              );
+              const rowStart = startSlot + 2;
+              const rowEnd = endSlot + 2;
+              const color = colorFor(block.course.code);
+              return (
+                <div
+                  key={`b-${di}-${bi}`}
+                  className={`m-0.5 overflow-hidden rounded-lg border px-1.5 py-1 leading-tight shadow-sm ${color}`}
+                  style={{ gridColumn: di + 2, gridRow: `${rowStart} / ${rowEnd}` }}
+                  title={`${block.course.code} — ${block.course.name}\n${block.session.day} ${block.session.start}-${block.session.end}\n${block.session.session}, Group ${block.session.group}`}
+                >
+                  <div className="font-semibold">{block.course.code}</div>
+                  <div className="truncate opacity-80">{block.session.session}</div>
+                  <div className="opacity-70">
+                    {block.session.start}–{block.session.end}
+                  </div>
+                </div>
+              );
+            }),
+          )}
+        </div>
+      </div>
+
+      <ul className="grid max-h-40 grid-cols-1 gap-1 overflow-auto text-xs text-slate-700 sm:grid-cols-2">
+        {plan.courses.map((c) => (
+          <li key={c.code} className="flex items-center gap-2">
+            <span
+              className={`inline-block h-3 w-3 rounded-sm border ${colorFor(c.code)}`}
+            />
+            <span className="font-semibold text-slate-800">{c.code}</span>
+            <span className="truncate text-slate-600">{c.name}</span>
+            <span className="ml-auto rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-600">
+              {c.ects} ECTS
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}

@@ -1,0 +1,7 @@
+COURSE_CODE: BUS103
+COURSE_NAME: Digital Marketing
+DEPARTMENT: Business
+ECTS: 6
+DESCRIPTION: Explores strategies for promoting products using social media and SEO.
+SCHEDULE:
+- Monday 13:00 - 16:00 (Lecture/Practical) for Group A

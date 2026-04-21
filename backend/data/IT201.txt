@@ -1,0 +1,9 @@
+COURSE_CODE: IT201
+COURSE_NAME: Introduction to Programming
+DEPARTMENT: IT
+ECTS: 12
+DESCRIPTION: A high-intensity course teaching the fundamentals of logic and syntax using Python.
+SCHEDULE:
+- Monday 08:00 - 12:00 (Lecture Core) for Group A
+- Wednesday 12:00 - 15:00 (Lab Session 2) for Group A
+- Friday 09:00 - 12:00 (Hackathon) for Group A

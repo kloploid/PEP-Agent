@@ -1,0 +1,7 @@
+COURSE_CODE: BUS102
+COURSE_NAME: Financial Accounting
+DEPARTMENT: Business
+ECTS: 6
+DESCRIPTION: Focuses on the preparation and interpretation of financial statements for external stakeholders.
+SCHEDULE:
+- Monday 08:30 - 11:30 (Lecture/Practical) for Group B

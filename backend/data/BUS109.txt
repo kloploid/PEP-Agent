@@ -1,0 +1,8 @@
+COURSE_CODE: BUS109
+COURSE_NAME: Entrepreneurship Lab
+DEPARTMENT: Business
+ECTS: 12
+DESCRIPTION: An intensive course where students develop a full business plan from ideation to pitch.
+SCHEDULE:
+- Tuesday 08:30 - 12:30 (Workshop Day 1) for Group B
+- Wednesday 08:30 - 12:30 (Project Work Day 2) for Group B

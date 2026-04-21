@@ -1,0 +1,8 @@
+COURSE_CODE: ENG310
+COURSE_NAME: Robotics & Automation
+DEPARTMENT: Engineering
+ECTS: 6
+DESCRIPTION: Combines mechanical and electrical engineering to build autonomous systems.
+SCHEDULE:
+- Wednesday 08:30 - 11:30 (Lecture/Lab) for Group B
+- Thursday 09:00 - 10:30 (Project Work) for Group B

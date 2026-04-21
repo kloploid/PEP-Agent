@@ -1,0 +1,7 @@
+COURSE_CODE: ENG309
+COURSE_NAME: Engineering Ethics
+DEPARTMENT: Engineering
+ECTS: 3
+DESCRIPTION: Discusses professional responsibilities and safety standards for engineers.
+SCHEDULE:
+- Wednesday 08:00 - 09:30 (Lecture) for Group A

@@ -1,0 +1,7 @@
+COURSE_CODE: ENG306
+COURSE_NAME: Fluid Mechanics
+DEPARTMENT: Engineering
+ECTS: 6
+DESCRIPTION: Explores the behavior of liquids and gases at rest and in motion.
+SCHEDULE:
+- Tuesday 08:30 - 11:30 (Lecture/Lab) for Group B

@@ -1,0 +1,7 @@
+COURSE_CODE: ENG307
+COURSE_NAME: CAD & 3D Modeling
+DEPARTMENT: Engineering
+ECTS: 3
+DESCRIPTION: Provides hands-on training in Computer-Aided Design software.
+SCHEDULE:
+- Tuesday 13:00 - 14:30 (Lab) for Group A

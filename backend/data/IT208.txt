@@ -1,0 +1,7 @@
+COURSE_CODE: IT208
+COURSE_NAME: Cloud Computing
+DEPARTMENT: IT
+ECTS: 3
+DESCRIPTION: Provides an overview of cloud service models like SaaS and PaaS.
+SCHEDULE:
+- Tuesday 13:00 - 14:30 (Lecture) for Group A

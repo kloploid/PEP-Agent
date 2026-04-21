@@ -1,0 +1,7 @@
+COURSE_CODE: ENG308
+COURSE_NAME: Control Systems
+DEPARTMENT: Engineering
+ECTS: 6
+DESCRIPTION: Focuses on the mathematical modeling of dynamic systems and feedback loops.
+SCHEDULE:
+- Tuesday 13:30 - 16:30 (Lecture/Lab) for Group B

@@ -1,0 +1,7 @@
+COURSE_CODE: ENG302
+COURSE_NAME: Statics & Dynamics
+DEPARTMENT: Engineering
+ECTS: 6
+DESCRIPTION: Analyzes forces acting on physical systems in equilibrium and in motion.
+SCHEDULE:
+- Tuesday 08:00 - 11:00 (Lecture/Practical) for Group A

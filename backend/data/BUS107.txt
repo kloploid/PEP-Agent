@@ -1,0 +1,7 @@
+COURSE_CODE: BUS107
+COURSE_NAME: Business Ethics
+DEPARTMENT: Business
+ECTS: 3
+DESCRIPTION: Explores moral dilemmas and social responsibility in the corporate world.
+SCHEDULE:
+- Tuesday 13:00 - 14:30 (Lecture) for Group A

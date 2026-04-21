@@ -1,0 +1,7 @@
+COURSE_CODE: IT203
+COURSE_NAME: Computer Networks
+DEPARTMENT: IT
+ECTS: 6
+DESCRIPTION: Explores the architecture and protocols used in local and wide area networks.
+SCHEDULE:
+- Monday 08:30 - 11:30 (Lecture/Lab) for Group B

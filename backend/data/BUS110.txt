@@ -1,0 +1,7 @@
+COURSE_CODE: BUS110
+COURSE_NAME: International Trade
+DEPARTMENT: Business
+ECTS: 6
+DESCRIPTION: Analyzes the complexities of doing business across borders.
+SCHEDULE:
+- Thursday 09:00 - 12:00 (Lecture/Practical) for Group B

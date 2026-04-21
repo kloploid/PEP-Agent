@@ -1,0 +1,8 @@
+COURSE_CODE: BUS106
+COURSE_NAME: Human Resource Management
+DEPARTMENT: Business
+ECTS: 6
+DESCRIPTION: Focuses on talent acquisition and employee development.
+SCHEDULE:
+- Tuesday 08:00 - 11:00 (Lecture/Practical) for Group A
+- Thursday 10:00 - 11:30 (Seminar) for Group A

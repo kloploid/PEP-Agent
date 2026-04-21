@@ -1,0 +1,7 @@
+COURSE_CODE: BUS101
+COURSE_NAME: Principles of Management
+DEPARTMENT: Business
+ECTS: 6
+DESCRIPTION: Covers the fundamental functions of planning and leading within a corporate environment.
+SCHEDULE:
+- Monday 08:00 - 11:00 (Lecture/Practical) for Group A

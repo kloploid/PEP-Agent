@@ -1,0 +1,8 @@
+COURSE_CODE: BUS104
+COURSE_NAME: Macroeconomics
+DEPARTMENT: Business
+ECTS: 3
+DESCRIPTION: Examines large-scale economic factors such as inflation and national income.
+SCHEDULE:
+- Tuesday 14:00 - 15:30 (Lecture) for Group B
+- Wednesday 13:00 - 14:30 (Seminar) for Group B

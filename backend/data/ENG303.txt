@@ -1,0 +1,7 @@
+COURSE_CODE: ENG303
+COURSE_NAME: Thermodynamics
+DEPARTMENT: Engineering
+ECTS: 6
+DESCRIPTION: Studies the principles of energy and heat in physical systems.
+SCHEDULE:
+- Monday 08:30 - 11:30 (Lecture/Lab) for Group B

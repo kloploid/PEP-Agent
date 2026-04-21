@@ -1,0 +1,7 @@
+COURSE_CODE: IT205
+COURSE_NAME: Cybersecurity Fundamentals
+DEPARTMENT: IT
+ECTS: 6
+DESCRIPTION: Introduces the principles of protecting systems and data from digital attacks.
+SCHEDULE:
+- Monday 13:30 - 16:30 (Lecture/Lab) for Group B

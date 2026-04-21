@@ -1,0 +1,7 @@
+COURSE_CODE: ENG304
+COURSE_NAME: Circuit Analysis
+DEPARTMENT: Engineering
+ECTS: 6
+DESCRIPTION: Introduces the fundamental laws of electrical circuits and components.
+SCHEDULE:
+- Monday 13:00 - 16:00 (Lecture/Lab) for Group A

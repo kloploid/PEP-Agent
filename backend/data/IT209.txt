@@ -1,0 +1,7 @@
+COURSE_CODE: IT209
+COURSE_NAME: Operating Systems
+DEPARTMENT: IT
+ECTS: 6
+DESCRIPTION: Investigates how hardware and software interact focusing on memory management.
+SCHEDULE:
+- Wednesday 08:30 - 11:30 (Lecture/Lab) for Group B

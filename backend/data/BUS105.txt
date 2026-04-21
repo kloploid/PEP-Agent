@@ -1,0 +1,7 @@
+COURSE_CODE: BUS105
+COURSE_NAME: Corporate Finance
+DEPARTMENT: Business
+ECTS: 6
+DESCRIPTION: Deals with investment decisions and capital structure to maximize shareholder value.
+SCHEDULE:
+- Monday 13:30 - 16:30 (Lecture/Practical) for Group B

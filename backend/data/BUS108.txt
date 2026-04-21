@@ -1,0 +1,7 @@
+COURSE_CODE: BUS108
+COURSE_NAME: Logistics & Supply Chain
+DEPARTMENT: Business
+ECTS: 6
+DESCRIPTION: Manages the flow of goods from raw materials to the final consumer.
+SCHEDULE:
+- Wednesday 08:00 - 11:00 (Lecture/Practical) for Group A

@@ -1,0 +1,7 @@
+COURSE_CODE: IT202
+COURSE_NAME: Database Systems
+DEPARTMENT: IT
+ECTS: 6
+DESCRIPTION: Covers the design and implementation of relational databases using SQL.
+SCHEDULE:
+- Tuesday 08:00 - 11:00 (Lecture/Lab) for Group A

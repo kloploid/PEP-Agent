@@ -1,0 +1,7 @@
+COURSE_CODE: IT207
+COURSE_NAME: Artificial Intelligence
+DEPARTMENT: IT
+ECTS: 6
+DESCRIPTION: Explores machine learning algorithms and their practical applications.
+SCHEDULE:
+- Tuesday 13:30 - 16:30 (Lecture/Lab) for Group B

@@ -1,0 +1,7 @@
+COURSE_CODE: ENG305
+COURSE_NAME: Materials Science
+DEPARTMENT: Engineering
+ECTS: 6
+DESCRIPTION: Investigates the properties of metals and polymers used in construction.
+SCHEDULE:
+- Monday 13:30 - 16:30 (Lecture/Lab) for Group B

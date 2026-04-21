@@ -1,0 +1,7 @@
+COURSE_CODE: IT204
+COURSE_NAME: Web Development
+DEPARTMENT: IT
+ECTS: 6
+DESCRIPTION: Focuses on building responsive websites using HTML and CSS.
+SCHEDULE:
+- Monday 13:00 - 16:00 (Lecture/Lab) for Group A
