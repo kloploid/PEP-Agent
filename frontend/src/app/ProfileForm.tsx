@@ -51,6 +51,115 @@ const WEEKDAYS: Weekday[] = [
 const INPUT_CLASS =
   "w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none ring-slate-300 transition focus:ring-2";
 
+type BusyPattern = {
+  labels: string[];
+  count: [number, number];
+};
+
+type ProfilePreset = {
+  key: string;
+  label: string;
+  hint: string;
+  emoji: string;
+  specialization: Specialization;
+  goalRange: [number, number];
+  completedRange: [number, number];
+  busy: BusyPattern;
+};
+
+const PRESETS: ProfilePreset[] = [
+  {
+    key: "it-worker",
+    label: "Working IT",
+    hint: "IT major, part-time dev job, mid-high ECTS target",
+    emoji: "💻",
+    specialization: "IT",
+    goalRange: [24, 30],
+    completedRange: [3, 5],
+    busy: { labels: ["Work", "Part-time dev"], count: [1, 2] },
+  },
+  {
+    key: "biz-consult",
+    label: "Busy Business",
+    hint: "Business, client meetings, moderate load",
+    emoji: "💼",
+    specialization: "Business",
+    goalRange: [18, 24],
+    completedRange: [2, 4],
+    busy: { labels: ["Work", "Client meeting", "Consulting"], count: [2, 3] },
+  },
+  {
+    key: "eng-focused",
+    label: "Focused Engineer",
+    hint: "Engineering, light commitments, pushing for 30 ECTS",
+    emoji: "⚙️",
+    specialization: "Engineering",
+    goalRange: [24, 30],
+    completedRange: [4, 6],
+    busy: { labels: ["Lab duty", "Sports"], count: [0, 1] },
+  },
+  {
+    key: "it-freshman",
+    label: "Overloaded Freshman",
+    hint: "IT, many outside commitments, lighter ECTS goal",
+    emoji: "🎒",
+    specialization: "IT",
+    goalRange: [15, 21],
+    completedRange: [0, 2],
+    busy: { labels: ["Gym", "Tutoring", "Family"], count: [2, 3] },
+  },
+];
+
+function randInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function shuffled<T>(arr: readonly T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pad(n: number): string {
+  return String(n).padStart(2, "0");
+}
+
+function generateBusySlots(pattern: BusyPattern): BusySlot[] {
+  const n = randInt(pattern.count[0], pattern.count[1]);
+  const days = shuffled(WEEKDAYS).slice(0, n);
+  return days.map((day) => {
+    const morning = Math.random() < 0.5;
+    const startHour = morning ? randInt(8, 10) : randInt(13, 15);
+    const lengthHalfHours = randInt(3, 6); // 1.5h–3h, 30-min steps
+    const endTotalMin = Math.min(
+      startHour * 60 + lengthHalfHours * 30,
+      19 * 60,
+    );
+    return {
+      day,
+      start: `${pad(startHour)}:00`,
+      end: `${pad(Math.floor(endTotalMin / 60))}:${pad(endTotalMin % 60)}`,
+      label: pattern.labels[randInt(0, pattern.labels.length - 1)],
+    };
+  });
+}
+
+function pickCompletedCodes(
+  catalog: CourseInfo[],
+  dept: Specialization,
+  range: [number, number],
+): string[] {
+  const pool = catalog.filter((c) => c.department === dept);
+  const n = Math.min(randInt(range[0], range[1]), pool.length);
+  return shuffled(pool)
+    .slice(0, n)
+    .map((c) => c.code)
+    .sort();
+}
+
 export function ProfileForm({
   value,
   onChange,
@@ -154,6 +263,19 @@ export function ProfileForm({
     });
   }
 
+  function applyPreset(preset: ProfilePreset) {
+    onChange({
+      specialization: preset.specialization,
+      goal_ects: randInt(preset.goalRange[0], preset.goalRange[1]),
+      completed_codes: pickCompletedCodes(
+        catalog,
+        preset.specialization,
+        preset.completedRange,
+      ),
+      busy_slots: generateBusySlots(preset.busy),
+    });
+  }
+
   const completedEcts = useMemo(() => {
     const lookup = new Map(catalog.map((c) => [c.code, c.ects]));
     return value.completed_codes.reduce(
@@ -164,6 +286,30 @@ export function ProfileForm({
 
   return (
     <div>
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+          Test presets
+        </span>
+        {PRESETS.map((p) => (
+          <button
+            key={p.key}
+            type="button"
+            onClick={() => applyPreset(p)}
+            title={p.hint}
+            className="inline-flex items-center gap-1.5 rounded-full border border-[#6e5192]/30 bg-white px-3 py-1 text-xs font-medium text-[#6e5192] shadow-sm transition hover:border-[#6e5192] hover:bg-[#f1ebfa]"
+          >
+            <span aria-hidden>{p.emoji}</span>
+            {p.label}
+          </button>
+        ))}
+        <button
+          type="button"
+          onClick={() => onChange(EMPTY_PROFILE)}
+          className="ml-auto text-xs font-medium text-slate-500 underline underline-offset-2 transition hover:text-slate-700"
+        >
+          Clear
+        </button>
+      </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <label className="space-y-1">
           <span className="text-xs font-medium text-slate-700">Specialization</span>
