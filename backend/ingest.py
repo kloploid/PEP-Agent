@@ -13,7 +13,11 @@ import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
-from langchain_community.document_loaders import Docx2txtLoader, TextLoader
+from langchain_community.document_loaders import (
+    CSVLoader,
+    Docx2txtLoader,
+    TextLoader,
+)
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 load_dotenv()
@@ -30,6 +34,7 @@ LOADERS = {
     ".docx": Docx2txtLoader,
     ".txt": TextLoader,
     ".md": TextLoader,
+    ".csv": lambda path: CSVLoader(path, encoding="utf-8", autodetect_encoding=True),
 }
 
 
@@ -40,7 +45,8 @@ def load_all() -> list:
         if not loader_cls:
             continue
         print(f"  loading {path.relative_to(DATA_DIR)}")
-        docs.extend(loader_cls(str(path)).load())
+        loader = loader_cls(str(path))
+        docs.extend(loader.load())
     return docs
 
 
@@ -65,7 +71,7 @@ def main() -> int:
     print(f"Reading {DATA_DIR}")
     raw_docs = load_all()
     if not raw_docs:
-        print("No supported files (.docx/.txt/.md) found.", file=sys.stderr)
+        print("No supported files (.docx/.txt/.md/.csv) found.", file=sys.stderr)
         return 1
 
     splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=120)

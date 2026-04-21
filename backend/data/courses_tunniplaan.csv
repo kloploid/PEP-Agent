@@ -1,0 +1,59 @@
+Department,Day,Time,Subject,Type,ECTS
+Business,Mon,08:00 - 09:30,Principles of Management,Lecture,6
+Business,Mon,09:30 - 11:00,Principles of Management,Practical,6
+Business,Mon,11:15 - 12:45,Macroeconomics,Lecture,3
+Business,Mon,14:00 - 15:30,Financial Accounting,Lecture,6
+Business,Mon,15:30 - 17:00,Financial Accounting,Practical,6
+Business,Tue,08:30 - 11:30,Entrepreneurship Lab,Workshop,12
+Business,Tue,12:30 - 14:00,Digital Marketing,Lecture,6
+Business,Tue,14:00 - 15:30,Digital Marketing,Practical,6
+Business,Tue,15:45 - 17:15,Business Ethics,Lecture,3
+Business,Wed,08:30 - 11:30,Entrepreneurship Lab,Project Work,12
+Business,Wed,12:30 - 14:00,Corporate Finance,Lecture,6
+Business,Wed,14:00 - 15:30,Corporate Finance,Practical,6
+Business,Thu,08:00 - 09:30,Human Resource Management,Lecture,6
+Business,Thu,09:30 - 11:00,Human Resource Management,Practical,6
+Business,Thu,11:15 - 12:45,Logistics & Supply Chain,Lecture,6
+Business,Thu,14:00 - 15:30,Logistics & Supply Chain,Practical,6
+Business,Fri,09:00 - 10:30,International Trade,Lecture,6
+Business,Fri,10:30 - 12:00,International Trade,Practical,6
+IT,Mon,08:00 - 11:00,Introduction to Programming,Lecture,12
+IT,Mon,11:15 - 12:45,Database Systems,Lecture,6
+IT,Mon,14:00 - 15:30,Database Systems,Lab,6
+IT,Mon,15:30 - 17:00,Cloud Computing,Lecture,3
+IT,Tue,08:00 - 11:00,Introduction to Programming,Lab,12
+IT,Tue,11:15 - 12:45,Computer Networks,Lecture,6
+IT,Tue,14:00 - 15:30,Computer Networks,Lab,6
+IT,Tue,15:45 - 17:15,UI/UX Design,Lab,3
+IT,Wed,08:00 - 09:30,Cybersecurity Fundamentals,Lecture,6
+IT,Wed,09:30 - 11:00,Cybersecurity Fundamentals,Lab,6
+IT,Wed,11:15 - 12:45,Introduction to Programming,Tutorial,12
+IT,Wed,14:00 - 15:30,Web Development,Lecture,6
+IT,Wed,15:30 - 17:00,Web Development,Lab,6
+IT,Thu,08:00 - 09:30,Software Engineering,Lecture,6
+IT,Thu,09:30 - 11:00,Software Engineering,Practical,6
+IT,Thu,11:15 - 12:45,Artificial Intelligence,Lecture,6
+IT,Thu,14:00 - 15:30,Artificial Intelligence,Lab,6
+IT,Fri,08:30 - 10:00,Operating Systems,Lecture,6
+IT,Fri,10:00 - 11:30,Operating Systems,Lab,6
+IT,Fri,13:00 - 16:00,Introduction to Programming,Coding Hackathon,12
+Engineering,Mon,08:00 - 11:00,Calculus for Engineers,Lecture,12
+Engineering,Mon,11:15 - 12:45,Statics & Dynamics,Lecture,6
+Engineering,Mon,14:00 - 15:30,Statics & Dynamics,Practical,6
+Engineering,Mon,15:30 - 17:00,CAD & 3D Modeling,Lab,3
+Engineering,Tue,08:00 - 11:00,Calculus for Engineers,Practical,12
+Engineering,Tue,11:15 - 12:45,Thermodynamics,Lecture,6
+Engineering,Tue,14:00 - 15:30,Thermodynamics,Lab,6
+Engineering,Tue,15:45 - 17:15,Engineering Ethics,Lecture,3
+Engineering,Wed,08:00 - 09:30,Circuit Analysis,Lecture,6
+Engineering,Wed,09:30 - 11:00,Circuit Analysis,Lab,6
+Engineering,Wed,11:15 - 12:45,Calculus for Engineers,Seminar,12
+Engineering,Wed,14:00 - 15:30,Materials Science,Lecture,6
+Engineering,Wed,15:30 - 17:00,Materials Science,Lab,6
+Engineering,Thu,08:00 - 09:30,Fluid Mechanics,Lecture,6
+Engineering,Thu,09:30 - 11:00,Fluid Mechanics,Lab,6
+Engineering,Thu,11:15 - 12:45,Control Systems,Lecture,6
+Engineering,Thu,14:00 - 15:30,Control Systems,Lab,6
+Engineering,Fri,08:30 - 10:00,Robotics & Automation,Lecture,6
+Engineering,Fri,10:00 - 11:30,Robotics & Automation,Lab,6
+Engineering,Fri,13:00 - 16:00,Calculus for Engineers,Advanced Problem Set,12

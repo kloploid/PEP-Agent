@@ -1,0 +1,31 @@
+Department,Subject Name,ECTS,Description
+Business,Principles of Management,6,Covers the fundamental functions of planning and leading within a corporate environment.
+Business,Financial Accounting,6,Focuses on the preparation and interpretation of financial statements for external stakeholders.
+Business,Digital Marketing,6,Explores strategies for promoting products using social media and SEO.
+Business,Macroeconomics,3,Examines large-scale economic factors such as inflation and national income.
+Business,Corporate Finance,6,Deals with investment decisions and capital structure to maximize shareholder value.
+Business,Human Resource Management,6,Focuses on talent acquisition and employee development.
+Business,Business Ethics,3,Explores moral dilemmas and social responsibility in the corporate world.
+Business,Logistics & Supply Chain,6,Manages the flow of goods from raw materials to the final consumer.
+Business,Entrepreneurship Lab,12,An intensive course where students develop a full business plan from ideation to pitch.
+Business,International Trade,6,Analyzes the complexities of doing business across borders.
+IT,Introduction to Programming,12,A high-intensity course teaching the fundamentals of logic and syntax using Python.
+IT,Database Systems,6,Covers the design and implementation of relational databases using SQL.
+IT,Computer Networks,6,Explores the architecture and protocols used in local and wide area networks.
+IT,Web Development,6,Focuses on building responsive websites using HTML and CSS.
+IT,Cybersecurity Fundamentals,6,Introduces the principles of protecting systems and data from digital attacks.
+IT,Software Engineering,6,Applies engineering principles to the software development lifecycle.
+IT,Artificial Intelligence,6,Explores machine learning algorithms and their practical applications.
+IT,Cloud Computing,3,Provides an overview of cloud service models like SaaS and PaaS.
+IT,Operating Systems,6,Investigates how hardware and software interact focusing on memory management.
+IT,UI/UX Design,3,Focuses on user-centric design principles and wireframing tools.
+Engineering,Calculus for Engineers,12,An intensive mathematical foundation covering derivatives and differential equations.
+Engineering,Statics & Dynamics,6,Analyzes forces acting on physical systems in equilibrium and in motion.
+Engineering,Thermodynamics,6,Studies the principles of energy and heat in physical systems.
+Engineering,Circuit Analysis,6,Introduces the fundamental laws of electrical circuits and components.
+Engineering,Materials Science,6,Investigates the properties of metals and polymers used in construction.
+Engineering,Fluid Mechanics,6,Explores the behavior of liquids and gases at rest and in motion.
+Engineering,CAD & 3D Modeling,3,Provides hands-on training in Computer-Aided Design software.
+Engineering,Control Systems,6,Focuses on the mathematical modeling of dynamic systems and feedback loops.
+Engineering,Engineering Ethics,3,Discusses professional responsibilities and safety standards for engineers.
+Engineering,Robotics & Automation,6,Combines mechanical and electrical engineering to build autonomous systems.
