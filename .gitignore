@@ -15,7 +15,7 @@ frontend/next-env.d.ts
 # Env
 .env
 .env.local
-.env.example
+.env
 .env.local.example
 
 # OS / IDE

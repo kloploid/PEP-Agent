@@ -38,7 +38,7 @@ export default function Home() {
   }
 
   return (
-    <main className="mx-auto flex h-dvh max-w-2xl flex-col p-6">
+    <main className="mx-auto flex min-h-dvh max-w-2xl flex-col p-6 pb-24">
       <h1 className="mb-4 text-2xl font-semibold">PEP-Agent</h1>
 
       <div className="flex-1 space-y-3 overflow-y-auto rounded-lg border border-black/10 p-4 dark:border-white/10">
@@ -63,7 +63,7 @@ export default function Home() {
         {loading && <div className="text-sm opacity-60">Thinking...</div>}
       </div>
 
-      <div className="mt-4 flex gap-2">
+      <div className="relative z-10 mt-4 flex gap-2">
         <input
           className="flex-1 rounded-lg border border-black/20 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/60 dark:border-white/20 dark:focus:border-white/60"
           placeholder="Type a message..."
