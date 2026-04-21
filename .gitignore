@@ -22,3 +22,4 @@ frontend/next-env.d.ts
 .DS_Store
 .idea/
 .vscode/
+/backend/.fastembed_cache

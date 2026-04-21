@@ -1,8 +1,60 @@
 "use client";
 
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 type Message = { role: "user" | "assistant"; content: string };
+
+const mdComponents = {
+  p: (props: React.HTMLAttributes<HTMLParagraphElement>) => (
+    <p className="leading-relaxed" {...props} />
+  ),
+  strong: (props: React.HTMLAttributes<HTMLElement>) => (
+    <strong className="font-semibold" {...props} />
+  ),
+  ul: (props: React.HTMLAttributes<HTMLUListElement>) => (
+    <ul className="list-disc space-y-1 pl-5" {...props} />
+  ),
+  ol: (props: React.HTMLAttributes<HTMLOListElement>) => (
+    <ol className="list-decimal space-y-1 pl-5" {...props} />
+  ),
+  li: (props: React.HTMLAttributes<HTMLLIElement>) => (
+    <li className="leading-relaxed" {...props} />
+  ),
+  code: ({ className, ...props }: React.HTMLAttributes<HTMLElement>) =>
+    className?.includes("language-") ? (
+      <code className={className} {...props} />
+    ) : (
+      <code
+        className="rounded bg-black/10 px-1 py-0.5 text-[0.85em] dark:bg-white/10"
+        {...props}
+      />
+    ),
+  pre: (props: React.HTMLAttributes<HTMLPreElement>) => (
+    <pre
+      className="overflow-x-auto rounded bg-black/10 p-2 text-xs dark:bg-white/10"
+      {...props}
+    />
+  ),
+  a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+    <a
+      className="underline underline-offset-2"
+      target="_blank"
+      rel="noreferrer"
+      {...props}
+    />
+  ),
+  h1: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+    <h1 className="text-base font-semibold" {...props} />
+  ),
+  h2: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+    <h2 className="text-base font-semibold" {...props} />
+  ),
+  h3: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+    <h3 className="text-sm font-semibold" {...props} />
+  ),
+};
 
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -57,7 +109,15 @@ export default function Home() {
             }`}
           >
             <div className="mb-1 text-xs font-medium opacity-60">{m.role}</div>
-            <div className="whitespace-pre-wrap">{m.content}</div>
+            {m.role === "assistant" ? (
+              <div className="space-y-2">
+                <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>
+                  {m.content}
+                </ReactMarkdown>
+              </div>
+            ) : (
+              <div className="whitespace-pre-wrap">{m.content}</div>
+            )}
           </div>
         ))}
         {loading && <div className="text-sm opacity-60">Thinking...</div>}

@@ -6,7 +6,9 @@ LangGraph (Python) backend + Next.js frontend. LLM: **Azure OpenAI `gpt-5.4-nano
 
 ```
 backend/    FastAPI + LangGraph agent (Python 3.12, venv at backend/.venv)
+backend/data/   Source documents for the vector store (.docx, .txt, .md)
 frontend/   Next.js 16 app (TypeScript, Tailwind, App Router)
+qdrant      Vector DB (docker service, persisted to `qdrant_data` volume)
 ```
 
 ## Quick start (Docker)
@@ -18,8 +20,29 @@ docker compose up --build
 
 - Frontend: http://localhost:3000
 - Backend:  http://localhost:8000 (health at `/health`)
+- Qdrant:   http://localhost:6333/dashboard
 
 Hot reload is enabled for both services via bind mounts.
+
+### Ingest documents into the vector store
+
+Drop files into `backend/data/` (`.docx`, `.txt`, `.md` supported). The `ingester` service
+runs automatically on `docker compose up` — it populates Qdrant once, then exits.
+Subsequent starts skip re-ingest if the collection already has points.
+
+To force a full reingest after adding new files:
+
+```bash
+FORCE_REINGEST=1 docker compose up -d --force-recreate ingester
+```
+
+Or run the script manually:
+
+```bash
+docker compose exec backend python ingest.py
+```
+
+The agent uses retrieved chunks automatically on every `/chat` call.
 
 ## Local (without Docker)
 
