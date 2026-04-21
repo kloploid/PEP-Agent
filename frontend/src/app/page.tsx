@@ -78,13 +78,11 @@ export default function Home() {
   const [plan, setPlan] = useState<Plan | null>(null);
   const [profile, setProfile] = useState<StudentProfile>(EMPTY_PROFILE);
 
-  async function send() {
-    const text = input.trim();
+  async function sendText(text: string) {
     if (!text || loading) return;
 
     const next: Message[] = [...messages, { role: "user", content: text }];
     setMessages(next);
-    setInput("");
     setLoading(true);
 
     try {
@@ -117,6 +115,19 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
+  }
+
+  async function send() {
+    const text = input.trim();
+    if (!text) return;
+    setInput("");
+    await sendText(text);
+  }
+
+  async function rebuildPlan() {
+    await sendText(
+      "Rebuild the schedule using my updated profile — honor every busy slot listed above.",
+    );
   }
 
   return (
@@ -217,7 +228,12 @@ export default function Home() {
             </div>
 
             <div className="flex-1 overflow-auto p-5">
-              <Calendar plan={plan} busySlots={profile.busy_slots} />
+              <Calendar
+                plan={plan}
+                busySlots={profile.busy_slots}
+                onRebuild={rebuildPlan}
+                rebuilding={loading}
+              />
             </div>
           </article>
         </section>

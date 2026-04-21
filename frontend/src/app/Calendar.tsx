@@ -94,9 +94,13 @@ function statusLabel(plan: Plan): { text: string; tone: string } {
 export function Calendar({
   plan,
   busySlots = [],
+  onRebuild,
+  rebuilding,
 }: {
   plan: Plan | null;
   busySlots?: BusySlotView[];
+  onRebuild?: () => void;
+  rebuilding?: boolean;
 }) {
   if (!plan && busySlots.length === 0) {
     return (
@@ -114,17 +118,29 @@ export function Calendar({
     session: PlanSession;
     startMin: number;
     endMin: number;
+    conflict: boolean;
   };
   const byDay: Record<string, Block[]> = Object.fromEntries(DAYS.map((d) => [d, []]));
+  const conflictingCodes = new Set<string>();
   if (plan) {
     for (const course of plan.courses) {
       for (const session of course.sessions) {
         if (!(session.day in byDay)) continue;
+        const sStart = parseHHMM(session.start);
+        const sEnd = parseHHMM(session.end);
+        const clash = busySlots.some((b) => {
+          if (b.day !== session.day) return false;
+          const bStart = parseHHMM(b.start);
+          const bEnd = parseHHMM(b.end);
+          return sStart < bEnd && bStart < sEnd;
+        });
+        if (clash) conflictingCodes.add(course.code);
         byDay[session.day].push({
           course,
           session,
-          startMin: parseHHMM(session.start),
-          endMin: parseHHMM(session.end),
+          startMin: sStart,
+          endMin: sEnd,
+          conflict: clash,
         });
       }
     }
@@ -171,6 +187,25 @@ export function Calendar({
             ))}
         </div>
       </header>
+
+      {conflictingCodes.size > 0 && (
+        <div className="flex items-center justify-between gap-3 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-700">
+          <span>
+            <span className="font-semibold">Conflict:</span>{" "}
+            {Array.from(conflictingCodes).join(", ")} overlap your busy time.
+          </span>
+          {onRebuild && (
+            <button
+              type="button"
+              onClick={onRebuild}
+              disabled={rebuilding}
+              className="rounded-lg bg-[#6e5192] px-3 py-1 text-xs font-medium text-white transition hover:bg-[#8b5cf6] disabled:opacity-50"
+            >
+              {rebuilding ? "Rebuilding…" : "Rebuild plan"}
+            </button>
+          )}
+        </div>
+      )}
 
       <div className="flex-1 overflow-auto rounded-2xl border border-slate-200 bg-white">
         <div
@@ -279,9 +314,13 @@ export function Calendar({
               return (
                 <div
                   key={`b-${di}-${bi}`}
-                  className={`m-0.5 overflow-hidden rounded-lg border px-1.5 py-1 leading-tight shadow-sm ${color}`}
+                  className={`m-0.5 overflow-hidden rounded-lg border px-1.5 py-1 leading-tight shadow-sm ${
+                    block.conflict
+                      ? "border-rose-400 bg-rose-100/80 text-rose-800 ring-2 ring-rose-300"
+                      : color
+                  }`}
                   style={{ gridColumn: di + 2, gridRow: `${rowStart} / ${rowEnd}` }}
-                  title={`${block.course.code} — ${block.course.name}\n${block.session.day} ${block.session.start}-${block.session.end}\n${block.session.session}, Group ${block.session.group}`}
+                  title={`${block.course.code} — ${block.course.name}\n${block.session.day} ${block.session.start}-${block.session.end}\n${block.session.session}, Group ${block.session.group}${block.conflict ? "\n⚠ overlaps busy time" : ""}`}
                 >
                   <div className="font-semibold">{block.course.code}</div>
                   <div className="truncate opacity-80">{block.session.session}</div>
