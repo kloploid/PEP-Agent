@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -134,13 +135,20 @@ export default function Home() {
     <main className="min-h-dvh bg-slate-200 text-slate-900">
       <section className="flex min-h-dvh w-full flex-col gap-4">
         <header className="bg-[linear-gradient(90deg,#56367e_20%,#86d3ff_82%,#86d3ff_100%)] text-white shadow-[0_14px_50px_rgba(15,23,42,0.25)]">
-          <div className="px-5 py-3">
+          <div className="flex items-center gap-5 overflow-hidden px-5 py-[13px]">
+            <Image
+              src="/img/logo.png"
+              alt="RÕIS logo"
+              width={256}
+              height={256}
+              priority
+              className="h-24 w-auto drop-shadow-[0_6px_18px_rgba(15,23,42,0.35)]"
+            />
             <p
-              className="text-5xl font-semibold uppercase leading-[0.95] tracking-[0.2em] text-white/95"
-              style={{ fontFamily: '"BBHBartle", "Avenir Next", "Segoe UI", sans-serif' }}
+              className="text-5xl uppercase leading-[0.95] tracking-[0.2em] text-white/95"
+              style={{ fontFamily: 'Optima, sans-serif' }}
             >
-              <span className="block">PEP</span>
-              <span className="block">Assistant</span>
+              <span className="block">RÕIS</span>
             </p>
           </div>
 
