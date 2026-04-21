@@ -1,0 +1,7 @@
+COURSE_CODE: ENG315
+COURSE_NAME: Nano-Materials
+DEPARTMENT: Engineering
+ECTS: 3
+DESCRIPTION: Exploring the properties of materials at the atomic and molecular scale.
+SCHEDULE:
+- Wednesday 15:00 - 16:30 (Seminar) for Group A

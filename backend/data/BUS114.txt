@@ -1,0 +1,7 @@
+COURSE_CODE: BUS114
+COURSE_NAME: Data Analytics for Business
+DEPARTMENT: Business
+ECTS: 6
+DESCRIPTION: Using Excel and Tableau to interpret business data and make predictions.
+SCHEDULE:
+- Monday 08:30 - 11:30 (Lab) for Group B [Note: Direct substitute/overlap for BUS102]

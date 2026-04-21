@@ -1,0 +1,7 @@
+COURSE_CODE: IT213
+COURSE_NAME: Human-Computer Interaction
+DEPARTMENT: IT
+ECTS: 6
+DESCRIPTION: Studies the design of computer technology and the interaction between humans and systems.
+SCHEDULE:
+- Monday 14:00 - 17:00 (Lecture) for Group B [Note: Overlaps with IT205]

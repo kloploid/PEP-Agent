@@ -1,0 +1,7 @@
+COURSE_CODE: IT215
+COURSE_NAME: Blockchain Fundamentals
+DEPARTMENT: IT
+ECTS: 3
+DESCRIPTION: Exploring decentralized ledgers, smart contracts, and cryptocurrency technology.
+SCHEDULE:
+- Thursday 14:00 - 15:30 (Lecture) for Group A

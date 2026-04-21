@@ -1,0 +1,7 @@
+COURSE_CODE: BUS115
+COURSE_NAME: Leadership Skills
+DEPARTMENT: Business
+ECTS: 3
+DESCRIPTION: A soft-skills focused workshop on public speaking and team conflict resolution.
+SCHEDULE:
+- Friday 10:00 - 11:30 (Workshop) for Group A

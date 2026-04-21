@@ -1,0 +1,8 @@
+COURSE_CODE: ENG311
+COURSE_NAME: Sustainable Energy
+DEPARTMENT: Engineering
+ECTS: 6
+DESCRIPTION: Researching solar, wind, and hydro-electric power generation and storage.
+SCHEDULE:
+- Wednesday 14:00 - 17:00 (Lecture/Lab) for Group B
+- Friday 13:00 - 16:00 (Lecture/Lab) for Group A

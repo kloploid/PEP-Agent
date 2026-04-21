@@ -1,0 +1,7 @@
+COURSE_CODE: ENG314
+COURSE_NAME: Heat Transfer
+DEPARTMENT: Engineering
+ECTS: 6
+DESCRIPTION: Analyzing the exchange of thermal energy between physical systems.
+SCHEDULE:
+- Friday 09:00 - 12:00 (Lecture/Practical) for Group B

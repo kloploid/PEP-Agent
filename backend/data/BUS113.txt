@@ -1,0 +1,8 @@
+COURSE_CODE: BUS113
+COURSE_NAME: Business Law
+DEPARTMENT: Business
+ECTS: 6
+DESCRIPTION: Introduction to contracts, liability, and intellectual property rights in commerce.
+SCHEDULE:
+- Thursday 13:00 - 16:00 (Lecture) for Group A
+- Friday 13:00 - 16:00 (Lecture) for Group B

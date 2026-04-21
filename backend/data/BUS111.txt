@@ -1,0 +1,8 @@
+COURSE_CODE: BUS111
+COURSE_NAME: Project Management
+DEPARTMENT: Business
+ECTS: 6
+DESCRIPTION: Focuses on the methodology of planning, executing, and closing projects using Agile and Waterfall.
+SCHEDULE:
+- Monday 14:00 - 17:00 (Lecture/Practical) for Group A
+- Friday 09:00 - 12:00 (Lecture/Practical) for Group B

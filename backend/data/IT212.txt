@@ -1,0 +1,7 @@
+COURSE_CODE: IT212
+COURSE_NAME: Machine Learning
+DEPARTMENT: IT
+ECTS: 6
+DESCRIPTION: Deep dive into neural networks, regression models, and data training sets.
+SCHEDULE:
+- Wednesday 12:00 - 15:00 (Lecture/Lab) for Group B [Note: Overlaps with IT209/BUS104 times]

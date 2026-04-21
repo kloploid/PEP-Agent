@@ -1,0 +1,7 @@
+COURSE_CODE: IT214
+COURSE_NAME: DevSecOps
+DEPARTMENT: IT
+ECTS: 3
+DESCRIPTION: Integrating security practices into the software development and operations lifecycle.
+SCHEDULE:
+- Friday 10:00 - 11:30 (Seminar) for Group B

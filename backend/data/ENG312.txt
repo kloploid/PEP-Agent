@@ -1,0 +1,7 @@
+COURSE_CODE: ENG312
+COURSE_NAME: Structural Analysis
+DEPARTMENT: Engineering
+ECTS: 6
+DESCRIPTION: Calculating loads and stresses in buildings and bridges.
+SCHEDULE:
+- Monday 13:30 - 16:30 (Lecture/Practical) for Group B [Note: Overlap with ENG305]

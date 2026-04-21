@@ -1,0 +1,8 @@
+COURSE_CODE: ENG313
+COURSE_NAME: Mechatronics
+DEPARTMENT: Engineering
+ECTS: 6
+DESCRIPTION: The integration of mechanical systems with electronic control.
+SCHEDULE:
+- Thursday 11:00 - 14:00 (Lab) for Group A
+- Thursday 14:00 - 17:00 (Lab) for Group B

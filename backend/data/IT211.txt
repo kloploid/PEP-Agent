@@ -1,0 +1,8 @@
+COURSE_CODE: IT211
+COURSE_NAME: Mobile App Development
+DEPARTMENT: IT
+ECTS: 6
+DESCRIPTION: Building native and cross-platform mobile applications for iOS and Android.
+SCHEDULE:
+- Thursday 11:00 - 14:00 (Lecture/Lab) for Group A
+- Friday 13:00 - 16:00 (Lecture/Lab) for Group B
