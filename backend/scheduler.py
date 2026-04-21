@@ -27,6 +27,15 @@ class Session:
 
 
 @dataclass(frozen=True)
+class BusyInterval:
+    """A user-provided busy block (work, etc.) that courses must dodge."""
+    day: str
+    start_min: int
+    end_min: int
+    label: str = ""
+
+
+@dataclass(frozen=True)
 class Course:
     code: str
     name: str
@@ -43,6 +52,34 @@ class Course:
                 if a.start_min < b.end_min and b.start_min < a.end_min:
                     return True
         return False
+
+    def overlaps_busy(self, busy: "list[BusyInterval]") -> bool:
+        for s in self.sessions:
+            for b in busy:
+                if s.day != b.day:
+                    continue
+                if s.start_min < b.end_min and b.start_min < s.end_min:
+                    return True
+        return False
+
+
+def _parse_busy_slots(raw: list[dict] | None) -> list[BusyInterval]:
+    if not raw:
+        return []
+    out: list[BusyInterval] = []
+    for item in raw:
+        try:
+            out.append(
+                BusyInterval(
+                    day=item["day"],
+                    start_min=_to_minutes(item["start"]),
+                    end_min=_to_minutes(item["end"]),
+                    label=item.get("label", "") or "",
+                )
+            )
+        except (KeyError, ValueError, TypeError):
+            continue
+    return out
 
 
 def _to_minutes(hhmm: str) -> int:
@@ -204,6 +241,7 @@ def find_schedule(
     group_constraints: dict[str, str] | None = None,
     required_codes: list[str] | None = None,
     excluded_codes: list[str] | None = None,
+    busy_slots: list[BusyInterval] | None = None,
     auto_relax: bool = True,
 ) -> dict:
     """Build a non-overlapping schedule.
@@ -221,17 +259,19 @@ def find_schedule(
         group_constraints=group_constraints,
         required_codes=required_codes,
         excluded_codes=excluded_codes,
+        busy_slots=busy_slots,
     )
     if not auto_relax or primary.get("status") != "closest":
         return primary
 
     # Catalog ceiling: what's the max non-overlapping total ignoring soft
-    # filters (required/excluded still honored)? Lets the LLM distinguish
-    # "filters are blocking you" from "catalog can't reach target".
+    # filters (required/excluded + busy_slots still honored)? Lets the LLM
+    # distinguish "filters are blocking you" from "catalog can't reach target".
     ceiling = _solve_once(
         courses, target_ects,
         required_codes=required_codes,
         excluded_codes=excluded_codes,
+        busy_slots=busy_slots,
     )
     primary["absolute_max_ects"] = ceiling.get("total_ects", 0)
 
@@ -258,6 +298,7 @@ def find_schedule(
             "group_constraints": group_constraints,
             "required_codes": required_codes,
             "excluded_codes": excluded_codes,
+            "busy_slots": busy_slots,
             **overrides,
         }
         candidate = _solve_once(courses, target_ects, **kwargs)
@@ -286,10 +327,12 @@ def _solve_once(
     group_constraints: dict[str, str] | None = None,
     required_codes: list[str] | None = None,
     excluded_codes: list[str] | None = None,
+    busy_slots: list[BusyInterval] | None = None,
 ) -> dict:
     """Single constraint-satisfaction solve (no fallback)."""
     required_codes = [c.upper() for c in (required_codes or [])]
     excluded_codes_set = {c.upper() for c in (excluded_codes or [])}
+    busy = busy_slots or []
 
     by_code = {c.code.upper(): c for c in courses}
     required = [by_code[code] for code in required_codes if code in by_code]
@@ -322,6 +365,22 @@ def _solve_once(
                     "courses": [],
                 }
 
+    # Required courses must not overlap user's busy slots either.
+    for r in required:
+        if r.overlaps_busy(busy):
+            return {
+                "status": "infeasible",
+                "reason": (
+                    f"Required course {r.code} overlaps a busy slot "
+                    "(work or other activity)."
+                ),
+                "target_ects": target_ects,
+                "total_ects": 0,
+                "department": department,
+                "group": group,
+                "courses": [],
+            }
+
     req_ects = sum(c.ects for c in required)
     if req_ects > target_ects:
         return {
@@ -337,7 +396,8 @@ def _solve_once(
             "courses": _courses_to_dicts(required),
         }
 
-    # Pool: everything else that matches filters and doesn't overlap required.
+    # Pool: everything else that matches filters and doesn't overlap required
+    # or the user's busy slots.
     required_codes_upper = {c.code.upper() for c in required}
     pool = [
         c
@@ -347,6 +407,7 @@ def _solve_once(
         and (not department or c.department.lower() == department.lower())
         and _group_match(c, group, group_constraints)
         and not any(c.overlaps(r) for r in required)
+        and not c.overlaps_busy(busy)
     ]
 
     exact, close, close_total = _find_combination(required, pool, target_ects)
@@ -405,6 +466,17 @@ def _format(
 
 DepartmentLit = Literal["IT", "Business", "Engineering"]
 GroupLit = Literal["A", "B"]
+DayLit = Literal["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+
+
+class BusySlotArg(BaseModel):
+    day: DayLit = Field(description="Weekday of the busy block.")
+    start: str = Field(description="Start time, HH:MM in 24-hour format.")
+    end: str = Field(description="End time, HH:MM in 24-hour format.")
+    label: str = Field(
+        default="",
+        description="Free-text label, e.g. 'Work'. For display only.",
+    )
 
 
 class FindScheduleArgs(BaseModel):
@@ -450,6 +522,15 @@ class FindScheduleArgs(BaseModel):
         default_factory=list,
         description="Course codes the user explicitly does not want.",
     )
+    busy_slots: list[BusySlotArg] = Field(
+        default_factory=list,
+        description=(
+            "Weekly busy blocks the student cannot attend class during "
+            "(work, appointments, etc.). Every scheduled course session must "
+            "avoid every block. CARRY FORWARD the student's busy_slots from "
+            "the profile on EVERY call; do not silently drop them."
+        ),
+    )
 
 
 @tool("find_course_schedule", args_schema=FindScheduleArgs)
@@ -460,6 +541,7 @@ def find_course_schedule(
     group_constraints: Optional[dict[str, str]] = None,
     required_codes: list[str] | None = None,
     excluded_codes: list[str] | None = None,
+    busy_slots: list[dict] | None = None,
 ) -> str:
     """Build a verified non-overlapping course schedule.
 
@@ -490,5 +572,12 @@ def find_course_schedule(
         group_constraints=group_constraints,
         required_codes=required_codes or [],
         excluded_codes=excluded_codes or [],
+        busy_slots=_parse_busy_slots(
+            [b if isinstance(b, dict) else b.model_dump() for b in (busy_slots or [])]
+        ),
     )
+    if busy_slots:
+        plan["busy_slots"] = [
+            b if isinstance(b, dict) else b.model_dump() for b in busy_slots
+        ]
     return json.dumps(plan, ensure_ascii=False)

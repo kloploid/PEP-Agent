@@ -25,8 +25,8 @@ SYSTEM_PROMPT = (
     "catalog is in the CONTEXT section below.\n\n"
     "TOOLS:\n"
     "- `find_course_schedule(target_ects, department?, group?, "
-    "group_constraints?, required_codes?, excluded_codes?)` — returns a "
-    "verified non-overlapping schedule from the catalog.\n\n"
+    "group_constraints?, required_codes?, excluded_codes?, busy_slots?)` — "
+    "returns a verified non-overlapping schedule from the catalog.\n\n"
     "RULES:\n"
     "1. For ANY request about ECTS totals, schedules, course plans, or "
     "combining courses, you MUST call `find_course_schedule`. Never "
@@ -58,6 +58,12 @@ SYSTEM_PROMPT = (
     "4. Other arg mapping:\n"
     "   - 'keep ENG301 and ENG302' → `required_codes=[\"ENG301\",\"ENG302\"]`.\n"
     "   - 'not IT209' or 'avoid IT209' → `excluded_codes=[\"IT209\"]`.\n"
+    "   - 'I work Tuesday 14:00-18:00' → "
+    "`busy_slots=[{\"day\":\"Tuesday\",\"start\":\"14:00\",\"end\":\"18:00\","
+    "\"label\":\"Work\"}]`. ALWAYS forward the full `busy_slots` list from "
+    "the student's profile on every tool call — never drop them, even on "
+    "follow-up turns where the user changes other filters. Add new blocks "
+    "the user mentions in chat on top of profile busy_slots.\n"
     "5. Result handling:\n"
     "   - status='exact': present the plan cleanly.\n"
     "   - status='closest': compare `total_ects` with `absolute_max_ects`.\n"
@@ -108,10 +114,22 @@ def _format_profile(student: dict | None) -> str:
         )
     if goal := student.get("goal_ects"):
         lines.append(f"- goal this term: {goal} ECTS")
+    if busy := student.get("busy_slots"):
+        pretty = ", ".join(
+            f"{b.get('day')} {b.get('start')}-{b.get('end')}"
+            + (f" ({b.get('label')})" if b.get("label") else "")
+            for b in busy
+        )
+        lines.append(
+            f"- busy slots (work/other activities, NO classes allowed): {pretty}"
+        )
     lines.append(
         "Defaults for `find_course_schedule`:\n"
         "- `target_ects` = goal.\n"
         "- `excluded_codes` = every completed course (never put them in a plan).\n"
+        "- `busy_slots` = the full list above on EVERY call — the scheduler "
+        "will drop any course session that overlaps a busy block, so "
+        "forgetting them means the user gets a plan that clashes with work.\n"
         "- `department` = specialization ALWAYS on the first call of a turn. "
         "The student overwhelmingly wants their major. The tool will "
         "auto-attach an `alternative` plan (with filters relaxed) if the "

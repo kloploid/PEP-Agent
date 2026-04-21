@@ -30,10 +30,18 @@ class ChatMessage(BaseModel):
     content: str
 
 
+class BusySlot(BaseModel):
+    day: Literal["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+    start: str
+    end: str
+    label: str = ""
+
+
 class StudentProfile(BaseModel):
     specialization: Optional[Literal["IT", "Business", "Engineering"]] = None
     completed_codes: list[str] = []
     goal_ects: Optional[int] = None
+    busy_slots: list[BusySlot] = []
 
 
 class ChatRequest(BaseModel):

@@ -25,6 +25,15 @@ export type Plan = {
   group_constraints: Record<string, string>;
   courses: PlanCourse[];
   reason?: string;
+  absolute_max_ects?: number;
+  alternative?: Plan & { relaxed?: string };
+};
+
+export type BusySlotView = {
+  day: string;
+  start: string;
+  end: string;
+  label?: string;
 };
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"] as const;
@@ -82,8 +91,14 @@ function statusLabel(plan: Plan): { text: string; tone: string } {
   return { text: "No plan", tone: "text-slate-500" };
 }
 
-export function Calendar({ plan }: { plan: Plan | null }) {
-  if (!plan) {
+export function Calendar({
+  plan,
+  busySlots = [],
+}: {
+  plan: Plan | null;
+  busySlots?: BusySlotView[];
+}) {
+  if (!plan && busySlots.length === 0) {
     return (
       <div className="flex h-full items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white p-6 text-sm text-slate-500">
         Ask the agent for a schedule — the calendar will appear here.
@@ -91,7 +106,7 @@ export function Calendar({ plan }: { plan: Plan | null }) {
     );
   }
 
-  const status = statusLabel(plan);
+  const status = plan ? statusLabel(plan) : null;
 
   // Bucket sessions by day, with references to their course for coloring.
   type Block = {
@@ -101,16 +116,35 @@ export function Calendar({ plan }: { plan: Plan | null }) {
     endMin: number;
   };
   const byDay: Record<string, Block[]> = Object.fromEntries(DAYS.map((d) => [d, []]));
-  for (const course of plan.courses) {
-    for (const session of course.sessions) {
-      if (!(session.day in byDay)) continue;
-      byDay[session.day].push({
-        course,
-        session,
-        startMin: parseHHMM(session.start),
-        endMin: parseHHMM(session.end),
-      });
+  if (plan) {
+    for (const course of plan.courses) {
+      for (const session of course.sessions) {
+        if (!(session.day in byDay)) continue;
+        byDay[session.day].push({
+          course,
+          session,
+          startMin: parseHHMM(session.start),
+          endMin: parseHHMM(session.end),
+        });
+      }
     }
+  }
+
+  type BusyBlock = {
+    slot: BusySlotView;
+    startMin: number;
+    endMin: number;
+  };
+  const busyByDay: Record<string, BusyBlock[]> = Object.fromEntries(
+    DAYS.map((d) => [d, []]),
+  );
+  for (const b of busySlots) {
+    if (!(b.day in busyByDay)) continue;
+    busyByDay[b.day].push({
+      slot: b,
+      startMin: parseHHMM(b.start),
+      endMin: parseHHMM(b.end),
+    });
   }
 
   return (
@@ -118,16 +152,23 @@ export function Calendar({ plan }: { plan: Plan | null }) {
       <header className="flex items-baseline justify-between gap-2">
         <div>
           <div className="text-sm font-semibold text-slate-800">Weekly plan</div>
-          <div className={`text-xs ${status.tone}`}>{status.text}</div>
+          {status ? (
+            <div className={`text-xs ${status.tone}`}>{status.text}</div>
+          ) : (
+            <div className="text-xs text-slate-500">
+              Busy blocks only — ask the agent for a plan
+            </div>
+          )}
         </div>
         <div className="text-right text-xs text-slate-500">
-          {plan.department && <div>{plan.department}</div>}
-          {plan.group && <div>Group {plan.group}</div>}
-          {Object.entries(plan.group_constraints ?? {}).map(([d, g]) => (
-            <div key={d}>
-              {d}: Group {g}
-            </div>
-          ))}
+          {plan?.department && <div>{plan.department}</div>}
+          {plan?.group && <div>Group {plan.group}</div>}
+          {plan &&
+            Object.entries(plan.group_constraints ?? {}).map(([d, g]) => (
+              <div key={d}>
+                {d}: Group {g}
+              </div>
+            ))}
         </div>
       </header>
 
@@ -187,6 +228,43 @@ export function Calendar({ plan }: { plan: Plan | null }) {
             }),
           )}
 
+          {/* Busy blocks (rendered beneath course blocks) */}
+          {DAYS.flatMap((day, di) =>
+            busyByDay[day].map((block, bi) => {
+              const startSlot = Math.max(
+                0,
+                Math.floor((block.startMin - START_MIN) / SLOT_MIN),
+              );
+              const endSlot = Math.min(
+                TOTAL_SLOTS,
+                Math.ceil((block.endMin - START_MIN) / SLOT_MIN),
+              );
+              if (endSlot <= startSlot) return null;
+              const rowStart = startSlot + 2;
+              const rowEnd = endSlot + 2;
+              return (
+                <div
+                  key={`busy-${di}-${bi}`}
+                  className="m-0.5 overflow-hidden rounded-lg border border-slate-300 bg-slate-200/70 px-1.5 py-1 leading-tight text-slate-600"
+                  style={{
+                    gridColumn: di + 2,
+                    gridRow: `${rowStart} / ${rowEnd}`,
+                    backgroundImage:
+                      "repeating-linear-gradient(45deg, rgba(100,116,139,0.18) 0 6px, transparent 6px 12px)",
+                  }}
+                  title={`Busy${block.slot.label ? ` — ${block.slot.label}` : ""}\n${block.slot.day} ${block.slot.start}-${block.slot.end}`}
+                >
+                  <div className="font-semibold">
+                    {block.slot.label || "Busy"}
+                  </div>
+                  <div className="opacity-70">
+                    {block.slot.start}–{block.slot.end}
+                  </div>
+                </div>
+              );
+            }),
+          )}
+
           {/* Session blocks */}
           {DAYS.flatMap((day, di) =>
             byDay[day].map((block, bi) => {
@@ -217,20 +295,22 @@ export function Calendar({ plan }: { plan: Plan | null }) {
         </div>
       </div>
 
-      <ul className="grid max-h-40 grid-cols-1 gap-1 overflow-auto text-xs text-slate-700 sm:grid-cols-2">
-        {plan.courses.map((c) => (
-          <li key={c.code} className="flex items-center gap-2">
-            <span
-              className={`inline-block h-3 w-3 rounded-sm border ${colorFor(c.code)}`}
-            />
-            <span className="font-semibold text-slate-800">{c.code}</span>
-            <span className="truncate text-slate-600">{c.name}</span>
-            <span className="ml-auto rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-600">
-              {c.ects} ECTS
-            </span>
-          </li>
-        ))}
-      </ul>
+      {plan && plan.courses.length > 0 && (
+        <ul className="grid max-h-40 grid-cols-1 gap-1 overflow-auto text-xs text-slate-700 sm:grid-cols-2">
+          {plan.courses.map((c) => (
+            <li key={c.code} className="flex items-center gap-2">
+              <span
+                className={`inline-block h-3 w-3 rounded-sm border ${colorFor(c.code)}`}
+              />
+              <span className="font-semibold text-slate-800">{c.code}</span>
+              <span className="truncate text-slate-600">{c.name}</span>
+              <span className="ml-auto rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-600">
+                {c.ects} ECTS
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

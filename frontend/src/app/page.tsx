@@ -66,7 +66,8 @@ function hasProfileData(p: StudentProfile): boolean {
   return (
     p.specialization !== null ||
     p.goal_ects !== null ||
-    p.completed_codes.length > 0
+    p.completed_codes.length > 0 ||
+    p.busy_slots.length > 0
   );
 }
 
@@ -99,7 +100,15 @@ export default function Home() {
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error ?? "Request failed");
       setMessages([...next, { role: "assistant", content: data.reply }]);
-      if (data.plan) setPlan(data.plan as Plan);
+      if (data.plan) {
+        const p = data.plan as Plan;
+        const alt = p.alternative;
+        const display =
+          alt && (alt.total_ects ?? 0) > (p.total_ects ?? 0) ? alt : p;
+        setPlan({ ...display });
+      } else {
+        setPlan(null);
+      }
     } catch (e) {
       setMessages([
         ...next,
@@ -208,7 +217,7 @@ export default function Home() {
             </div>
 
             <div className="flex-1 overflow-auto p-5">
-              <Calendar plan={plan} />
+              <Calendar plan={plan} busySlots={profile.busy_slots} />
             </div>
           </article>
         </section>
