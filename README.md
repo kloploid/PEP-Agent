@@ -4,7 +4,7 @@
 
 # PEP-Agent · RÕIS
 
-**AI-ассистент для планирования учебного расписания**
+**AI-assistent õppetunniplaani koostamiseks**
 
 LangGraph (Python) + Next.js 16 · Azure OpenAI `gpt-5.4-nano` · Qdrant + FastEmbed
 
@@ -18,33 +18,24 @@ LangGraph (Python) + Next.js 16 · Azure OpenAI `gpt-5.4-nano` · Qdrant + FastE
 
 ---
 
-## О проекте
+## Projektist
 
-**RÕIS** — это чат-ассистент, который собирает для студента расписание курсов под его цели по ECTS, специализацию и занятые временные слоты. Агент использует векторный поиск по каталогу дисциплин и детерминированный планировщик — никаких «выдуманных» курсов.
-
-<div align="center">
-
-| Waiting | Thinking | Answering |
-|:---:|:---:|:---:|
-| <img src="frontend/public/img/waiting.png" width="140" /> | <img src="frontend/public/img/thinking.png" width="140" /> | <img src="frontend/public/img/answering_openMouth.png" width="140" /> |
-| *ждёт вопроса* | *ищет по каталогу* | *показывает план* |
-
-</div>
+**RÕIS** on vestlusassistent, mis koostab üliõpilasele aineplaani vastavalt tema ECTS-eesmärkidele, erialale ja hõivatud ajavõitudele. Agent kasutab vektorilist otsingut ainete kataloogist ja deterministlikku planeerijat — ühtegi väljamõeldud ainet ei pakuta.
 
 ---
 
-## Возможности
+## Võimalused
 
-- **Чат с контекстом** — история, Markdown, GFM-таблицы, подсветка кода
-- **Профиль студента** — специализация, цель по ECTS, пройденные коды, занятые слоты
-- **Живое расписание** — календарь на неделю с рендером предложенного плана
-- **RAG по каталогу** — Qdrant + многоязычный FastEmbed подтягивают релевантные курсы
-- **Детерминированный планировщик** — инструмент `find_course_schedule` гарантирует, что пары не пересекаются
-- **Маскот-индикатор состояния** — рысь реагирует на фазу диалога (waiting → thinking → answering)
+- **Kontekstuaalne vestlus** — ajalugu, Markdown, GFM-tabelid, koodisüntaks
+- **Üliõpilase profiil** — eriala, ECTS-eesmärk, läbitud ainekoodid, hõivatud ajad
+- **Reaalajas tunniplaan** — nädalakalender pakutud plaani kuvamiseks
+- **RAG kataloogi järgi** — Qdrant + mitmekeelne FastEmbed toob relevantse konteksti
+- **Deterministlik planeerija** — tööriist `find_course_schedule` tagab, et tunnid ei kattu
+- **Maskot-olekuindikaator** — ilves reageerib vestluse faasile (ootab → mõtleb → vastab)
 
 ---
 
-## Архитектура
+## Arhitektuur
 
 ```
 ┌─────────────────┐    POST /api/chat     ┌──────────────────┐    tool call     ┌───────────────┐
@@ -62,7 +53,7 @@ LangGraph (Python) + Next.js 16 · Azure OpenAI `gpt-5.4-nano` · Qdrant + FastE
                                           └──────────────────┘
 ```
 
-### Структура репозитория
+### Repositooriumi struktuur
 
 ```
 backend/          FastAPI + LangGraph agent (Python 3.12, venv at backend/.venv)
@@ -79,32 +70,32 @@ qdrant            vector DB (docker service, persisted to qdrant_data volume)
 
 ---
 
-## Быстрый старт (Docker)
+## Kiire alustamine (Docker)
 
 ```bash
-cp .env .env                 # заполни AZURE_OPENAI_API_KEY
+cp .env .env                 # täida AZURE_OPENAI_API_KEY
 docker compose up --build
 ```
 
-| Сервис   | URL                                   |
+| Teenus   | URL                                   |
 |----------|---------------------------------------|
 | Frontend | http://localhost:3000                 |
 | Backend  | http://localhost:8000 (`/health`)     |
 | Qdrant   | http://localhost:6333/dashboard       |
 
-Hot-reload включён у обоих сервисов через bind-mount.
+Mõlemal teenusel on hot-reload lubatud bind-mount kaudu.
 
-### Загрузка документов в векторную БД
+### Dokumentide laadimine vektorandmebaasi
 
-Положи файлы в `backend/data/` (`.docx`, `.txt`, `.md`). Сервис `ingester` запустится автоматически при `docker compose up`, заполнит Qdrant и выйдет. При повторных запусках проверяет, что коллекция уже наполнена, и пропускает реингест.
+Aseta failid kausta `backend/data/` (`.docx`, `.txt`, `.md`). Teenus `ingester` käivitub automaatselt käsu `docker compose up` ajal, täidab Qdrant-i ja väljub. Korduvatel käivitamistel kontrollib, kas kollektsioon on juba täidetud, ja jätab reingestimise vahele.
 
-Принудительный реингест после добавления новых файлов:
+Sunnitud reingest pärast uute failide lisamist:
 
 ```bash
 FORCE_REINGEST=1 docker compose up -d --force-recreate ingester
 ```
 
-Или запустить скрипт вручную:
+Või käivita skript käsitsi:
 
 ```bash
 docker compose exec backend python ingest.py
@@ -112,22 +103,22 @@ docker compose exec backend python ingest.py
 
 ---
 
-## Запуск локально (без Docker)
+## Kohalik käivitamine (ilma Dockerita)
 
 ### Backend
 
 ```bash
 cd backend
-cp .env .env                 # заполни AZURE_OPENAI_API_KEY
+cp .env .env                 # täida AZURE_OPENAI_API_KEY
 source .venv/bin/activate
 uvicorn main:app --reload --port 8000
 ```
 
-**Endpoints**
+**Endpointid**
 - `GET  /health`
-- `POST /chat` — тело: `{ "messages": [{"role": "user", "content": "hi"}] }`
+- `POST /chat` — keha: `{ "messages": [{"role": "user", "content": "hi"}] }`
 
-Граф агента редактируется в `backend/graph.py` — добавляй ноды, инструменты, поля состояния.
+Agendi graafi saab muuta failis `backend/graph.py` — lisa noode, tööriistu ja olekuvälju.
 
 ### Frontend
 
@@ -137,13 +128,13 @@ cp .env.local.example .env.local   # BACKEND_URL=http://localhost:8000
 npm run dev                        # http://localhost:3000
 ```
 
-Чат-UI постит в `/api/chat` (Next.js route handler), который проксирует запрос в Python-бэкенд.
+Vestluse UI postitab `/api/chat`-i (Next.js route handler), mis proksiib päringu Python-backendi.
 
 ---
 
-## Добавление зависимостей
+## Sõltuvuste lisamine
 
-- **Backend** — отредактируй `backend/pyproject.toml`, затем:
+- **Backend** — muuda `backend/pyproject.toml`, seejärel:
   ```bash
   VIRTUAL_ENV=backend/.venv uv pip install -r backend/pyproject.toml
   ```
@@ -151,12 +142,12 @@ npm run dev                        # http://localhost:3000
 
 ---
 
-## Стек
+## Stack
 
-| Слой          | Технологии                                                       |
+| Kiht          | Tehnoloogiad                                                     |
 |---------------|------------------------------------------------------------------|
 | LLM           | Azure OpenAI · `gpt-5.4-nano`                                    |
-| Embeddings    | FastEmbed (multilingual, локально)                               |
+| Embeddings    | FastEmbed (multilingual, lokaalselt)                             |
 | Vector DB     | Qdrant (docker, persisted volume)                                |
 | Agent         | LangGraph + LangChain                                            |
 | API           | FastAPI · Python 3.12                                            |
