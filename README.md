@@ -13,6 +13,7 @@ LangGraph (Python) + Next.js 16 · Azure OpenAI `gpt-5.4-nano` · Qdrant + FastE
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 ![Tailwind](https://img.shields.io/badge/Tailwind-4-38BDF8?logo=tailwindcss&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)
+![License](https://img.shields.io/badge/License-PolyForm%20Strict%201.0-red)
 
 </div>
 
@@ -157,5 +158,7 @@ Vestluse UI postitab `/api/chat`-i (Next.js route handler), mis proksiib päring
 <div align="center">
 
 <sub>Made with 💜 by the PEP-Agent team</sub>
+
+<sub>© 2026 PEP-Agent team · [PolyForm Strict License 1.0](LICENSE)</sub>
 
 </div>
